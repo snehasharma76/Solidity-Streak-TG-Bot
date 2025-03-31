@@ -74,22 +74,22 @@ def load_challenges_from_json():
     challenges_by_day = {}
     
     # Try to fetch from GitHub first
-    try:
-        logging.info(f"Attempting to fetch challenges from GitHub: {CHALLENGES_JSON_URL}")
-        response = requests.get(CHALLENGES_JSON_URL, timeout=10)
-        if response.status_code == 200:
-            challenges_data = response.json()
-            logging.info(f"Successfully loaded challenges from GitHub")
+    # try:
+    #     logging.info(f"Attempting to fetch challenges from GitHub: {CHALLENGES_JSON_URL}")
+    #     response = requests.get(CHALLENGES_JSON_URL, timeout=10)
+    #     if response.status_code == 200:
+    #         challenges_data = response.json()
+    #         logging.info(f"Successfully loaded challenges from GitHub")
             
-            # Convert to dictionary by day for easy lookup
-            for challenge in challenges_data.get("schedule", []):
-                day = challenge.get("day")
-                if day:
-                    challenges_by_day[day] = challenge
+    #         # Convert to dictionary by day for easy lookup
+    #         for challenge in challenges_data.get("schedule", []):
+    #             day = challenge.get("day")
+    #             if day:
+    #                 challenges_by_day[day] = challenge
             
-            return challenges_by_day
-    except Exception as e:
-        logging.error(f"Error fetching challenges from GitHub: {e}")
+    #         return challenges_by_day
+    # except Exception as e:
+    #     logging.error(f"Error fetching challenges from GitHub: {e}")
     
     # If GitHub fails, try local file
     try:
