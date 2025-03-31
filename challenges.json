@@ -1,0 +1,244 @@
+{
+  "schedule": [
+    {
+      "day": 1,
+      "week": "Week 1: Solidity Fundamentals",
+      "contractName": "ClickCounter.sol",
+      "conceptsTaught": ["Basic Solidity syntax", "Variables (uint)", "Increment/Decrement functions"],
+      "exampleApplication": "A simple counter contract to learn variable declaration, function creation, and basic arithmetic. Like a YouTube view counter, tracking how many times a button is clicked.",
+      "logicalProgression": "Foundational syntax and basic contract structure."
+    },
+    {
+      "day": 2,
+      "week": "Week 1: Solidity Fundamentals",
+      "contractName": "SaveMyName.sol",
+      "conceptsTaught": ["State variables (string, bool)", "Storage and retrieval"],
+      "exampleApplication": "A contract that stores and retrieves a user's name and status, teaching basic data storage. Like Instagram profiles, where users can store and retrieve their names.",
+      "logicalProgression": "Introduces data types and state management."
+    },
+    {
+      "day": 3,
+      "week": "Week 1: Solidity Fundamentals",
+      "contractName": "PollStation.sol",
+      "conceptsTaught": ["Arrays (uint[])", "Mappings (mapping(address => uint))", "Simple voting logic"],
+      "exampleApplication": "A simple voting contract where users can vote, demonstrating arrays and mappings. Like Twitter/X polls, where users vote for their favorite option.",
+      "logicalProgression": "Introduces complex data structures (arrays, mappings) and logic."
+    },
+    {
+      "day": 4,
+      "week": "Week 1: Solidity Fundamentals",
+      "contractName": "AuctionHouse.sol",
+      "conceptsTaught": ["if/else statements", "Time (block.timestamp)", "Basic bidding"],
+      "exampleApplication": "A basic auction contract to learn conditional logic and time-based operations. Like eBay, allowing users to bid for items, and the highest bid wins.",
+      "logicalProgression": "Adds control flow and time management."
+    },
+    {
+      "day": 5,
+      "week": "Week 1: Solidity Fundamentals",
+      "contractName": "AdminOnly.sol",
+      "conceptsTaught": ["modifier", "msg.sender for ownership", "Basic access control"],
+      "exampleApplication": "A contract with an owner who can perform privileged actions, demonstrating basic access control. Like being an admin in a Discord server, where only certain users have control.",
+      "logicalProgression": "Introduces basic access control patterns."
+    },
+    {
+      "day": 6,
+      "week": "Week 1: Solidity Fundamentals",
+      "contractName": "EtherPiggyBank.sol",
+      "conceptsTaught": ["msg.sender", "address", "Ether balance", "Deposits and withdrawals"],
+      "exampleApplication": "A basic bank contract to learn how to manage Ether, track balances, and use msg.sender. Like a digital piggy bank, where users can deposit and withdraw savings.",
+      "logicalProgression": "Applies address type, msg.sender, and Ether handling."
+    },
+    {
+      "day": 7,
+      "week": "Week 1: Solidity Fundamentals",
+      "contractName": "SendSomeTokens.sol",
+      "conceptsTaught": ["address", "token transfer", "payable for gas", "validation (require)"],
+      "exampleApplication": "A simple token transfer contract where users can send tokens, teaching basic validation and gas considerations. Like sending money on Cash App, transferring tokens between users.",
+      "logicalProgression": "Introduces token basics and gas handling."
+    },
+    {
+      "day": 8,
+      "week": "Week 2: Intermediate Solidity",
+      "contractName": "TipJar.sol",
+      "conceptsTaught": ["payable", "msg.value", "Ether transfers", "simple donations"],
+      "exampleApplication": "A donation contract where users can send Ether, demonstrating handling Ether payments. Like \"Buy Me a Coffee\", where users can send tips to support a creator.",
+      "logicalProgression": "Deepens understanding of Ether transfers."
+    },
+    {
+      "day": 9,
+      "week": "Week 2: Intermediate Solidity",
+      "contractName": "SmartCalculator.sol",
+      "conceptsTaught": ["Calling functions of another contract", "address casting"],
+      "exampleApplication": "A contract that interacts with another contract to retrieve or modify data. Like a calculator app, where one contract asks another to compute something.",
+      "logicalProgression": "Introduces inter-contract communication."
+    },
+    {
+      "day": 10,
+      "week": "Week 2: Intermediate Solidity",
+      "contractName": "ActivityTracker.sol",
+      "conceptsTaught": ["Events", "logging data", "emitting events", "basic debugging"],
+      "exampleApplication": "A contract that emits events when certain actions occur, demonstrating event usage. Like Fitbit or Strava, logging fitness activities or app actions for tracking progress.",
+      "logicalProgression": "Introduces event logging for debugging and tracking."
+    },
+    {
+      "day": 11,
+      "week": "Week 2: Intermediate Solidity",
+      "contractName": "MasterKey.sol",
+      "conceptsTaught": ["Ownable pattern", "modifier onlyOwner", "robust access control"],
+      "exampleApplication": "A contract using the Ownable pattern for robust access control. Like a smart lock system, where only the owner has access.",
+      "logicalProgression": "Builds on basic ownership with a standard pattern."
+    },
+    {
+      "day": 12,
+      "week": "Week 2: Intermediate Solidity",
+      "contractName": "MyFirstToken.sol",
+      "conceptsTaught": ["ERC20 interface", "totalSupply", "balanceOf", "transfer", "token basics"],
+      "exampleApplication": "A basic ERC20 token implementation, teaching token standards. Like a custom in-game currency, for a multiplayer game.",
+      "logicalProgression": "Introduces standardized token interfaces."
+    },
+    {
+      "day": 13,
+      "week": "Week 2: Intermediate Solidity",
+      "contractName": "PreorderTokens.sol",
+      "conceptsTaught": ["Selling tokens for Ether", "rate calculations", "token economics"],
+      "exampleApplication": "A contract that sells tokens for Ether at a specific rate, teaching token economics. Like Kickstarter, where users buy tokens before a project launches.",
+      "logicalProgression": "Applies ERC20 concepts to a real-world scenario."
+    },
+    {
+      "day": 14,
+      "week": "Week 3: Advanced Solidity",
+      "contractName": "SafeDepositBox.sol",
+      "conceptsTaught": ["Storage patterns", "avoiding collisions", "storage layout understanding"],
+      "exampleApplication": "A contract demonstrating storage patterns and avoiding collisions, teaching storage efficiency. Like Google Drive for blockchain, storing data securely.",
+      "logicalProgression": "Focuses on efficient storage management."
+    },
+    {
+      "day": 15,
+      "week": "Week 3: Advanced Solidity",
+      "contractName": "GasSaver.sol",
+      "conceptsTaught": ["Gas optimization", "memory", "calldata", "minimizing storage"],
+      "exampleApplication": "A contract optimized for gas efficiency, demonstrating advanced optimization techniques. Like choosing low-power mode on a phone, optimizing for efficiency.",
+      "logicalProgression": "Builds on storage efficiency with gas optimization."
+    },
+    {
+      "day": 16,
+      "week": "Week 3: Advanced Solidity",
+      "contractName": "PluginStore.sol",
+      "conceptsTaught": ["delegatecall", "code execution context", "libraries"],
+      "exampleApplication": "A contract using delegatecall to call library functions, teaching code reuse. Like a browser extension store, allowing users to load external functionality dynamically.",
+      "logicalProgression": "Introduces advanced execution control."
+    },
+    {
+      "day": 17,
+      "week": "Week 3: Advanced Solidity",
+      "contractName": "UpgradeHub.sol",
+      "conceptsTaught": ["Upgradeable contracts", "proxy pattern", "delegate call for upgrades"],
+      "exampleApplication": "A contract using a proxy pattern for upgradeability, demonstrating advanced contract management. Like software version updates in mobile apps, where an app upgrades without reinstalling.",
+      "logicalProgression": "Applies delegatecall to contract upgrades."
+    },
+    {
+      "day": 18,
+      "week": "Week 3: Advanced Solidity",
+      "contractName": "WeatherOracle.sol",
+      "conceptsTaught": ["Interacting with oracles", "fetching off-chain data"],
+      "exampleApplication": "A contract that fetches data from an oracle, demonstrating external data integration. Like a weather app, fetching real-time data from an external source.",
+      "logicalProgression": "Introduces external data integration."
+    },
+    {
+      "day": 19,
+      "week": "Week 3: Advanced Solidity",
+      "contractName": "SignThis.sol",
+      "conceptsTaught": ["ecrecover", "verifying signatures", "basic authentication"],
+      "exampleApplication": "A contract that verifies signatures, demonstrating authentication techniques. Like logging into a site with MetaMask, verifying signatures.",
+      "logicalProgression": "Introduces cryptographic authentication."
+    },
+    {
+      "day": 20,
+      "week": "Week 3: Advanced Solidity",
+      "contractName": "FortKnox.sol",
+      "conceptsTaught": ["Reentrancy attacks", "nonReentrant modifier", "security best practices"],
+      "exampleApplication": "A contract with reentrancy protection, demonstrating security best practices. Like a secure crypto vault, preventing hackers from draining funds.",
+      "logicalProgression": "Introduces critical security concepts."
+    },
+    {
+      "day": 21,
+      "week": "Week 4: Real-World Applications",
+      "contractName": "SimpleNFT.sol",
+      "conceptsTaught": ["ERC721 basics", "minting NFTs", "metadata storage"],
+      "exampleApplication": "A contract for minting simple NFTs, teaching NFT standards.",
+      "logicalProgression": "Introduces NFT standards."
+    },
+    {
+      "day": 22,
+      "week": "Week 4: Real-World Applications",
+      "contractName": "DecentralizedLottery.sol",
+      "conceptsTaught": ["Chainlink VRF", "random number generation", "lottery logic"],
+      "exampleApplication": "A decentralized lottery using Chainlink VRF for randomness, demonstrating real-world applications.",
+      "logicalProgression": "Applies external data and randomness to a practical application."
+    },
+    {
+      "day": 23,
+      "week": "Week 4: Real-World Applications",
+      "contractName": "LendingPool.sol",
+      "conceptsTaught": ["Lending/borrowing", "interest calculations", "collateral"],
+      "exampleApplication": "A basic lending pool contract, demonstrating DeFi concepts.",
+      "logicalProgression": "Introduces core DeFi concepts."
+    },
+    {
+      "day": 24,
+      "week": "Week 4: Real-World Applications",
+      "contractName": "DecentralizedEscrow.sol",
+      "conceptsTaught": ["Escrow service", "conditional payments", "dispute resolution"],
+      "exampleApplication": "An escrow contract for handling conditional payments, demonstrating secure transactions.",
+      "logicalProgression": "Focuses on secure, conditional transactions."
+    },
+    {
+      "day": 25,
+      "week": "Week 4: Real-World Applications",
+      "contractName": "AutomatedMarketMaker.sol",
+      "conceptsTaught": ["AMM logic", "constant product formula", "liquidity pools"],
+      "exampleApplication": "A contract implementing a simple AMM, demonstrating liquidity provision.",
+      "logicalProgression": "Introduces advanced DeFi with AMMs."
+    },
+    {
+      "day": 26,
+      "week": "Week 4: Real-World Applications",
+      "contractName": "NFTMarketplace.sol",
+      "conceptsTaught": ["NFT marketplace", "listing/buying/selling", "royalties"],
+      "exampleApplication": "A basic NFT marketplace contract, demonstrating NFT trading.",
+      "logicalProgression": "Applies NFT standards to a marketplace."
+    },
+    {
+      "day": 27,
+      "week": "Week 4: Real-World Applications",
+      "contractName": "YieldFarming.sol",
+      "conceptsTaught": ["Yield farming", "staking", "reward distribution"],
+      "exampleApplication": "A basic yield farming contract, demonstrating staking and rewards.",
+      "logicalProgression": "Builds on AMMs with yield farming."
+    },
+    {
+      "day": 28,
+      "week": "Week 4: Real-World Applications",
+      "contractName": "DecentralizedGovernance.sol",
+      "conceptsTaught": ["DAO structure", "voting", "token-based governance"],
+      "exampleApplication": "A basic DAO contract for voting on proposals, demonstrating decentralized governance.",
+      "logicalProgression": "Introduces decentralized governance."
+    },
+    {
+      "day": 29,
+      "week": "Week 4: Real-World Applications.sol",
+      "contractName": "Stablecoin",
+      "conceptsTaught": ["Stablecoin implementation", "peg mechanisms", "price stability"],
+      "exampleApplication": "A basic stablecoin contract, demonstrating stablecoin mechanics.",
+      "logicalProgression": "Expands on DeFi with stablecoin mechanics."
+    },
+    {
+      "day": 30,
+      "week": "Week 4: Real-World Applications",
+      "contractName": "MiniDex.sol",
+      "conceptsTaught": ["Minimal decentralized exchange", "token swaps", "liquidity pools"],
+      "exampleApplication": "A minimal decentralized exchange, demonstrating token swaps and liquidity pools.",
+      "logicalProgression": "Combines many DeFi concepts into a practical application."
+    }
+  ]
+}
