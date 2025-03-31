@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  solidity-bot:
+    build: .
+    volumes:
+      - ./data:/app/data
+    environment:
+      - API_KEY=${API_KEY}
+      - GROUP_CHAT_ID=${GROUP_CHAT_ID}
+    restart: unless-stopped
