@@ -28,7 +28,7 @@ GROUP_CHAT_IDS = [int(chat_id.strip()) for chat_id in group_chat_ids_str.split("
 # Constants
 CHALLENGE_URL = "https://web3compass.xyz/challenge-calendar"
 # Replace this with your GitHub raw content URL once you've uploaded the file
-CHALLENGES_JSON_URL = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/challenges.json"
+CHALLENGES_JSON_URL = "https://raw.githubusercontent.com/SethuRamanOmanakuttan/challenge-data-solution/refs/heads/main/challenges.json"
 # Local fallback file
 LOCAL_CHALLENGES_FILE = "challenges.json"
 utc = pytz.UTC
@@ -73,30 +73,13 @@ def load_challenges_from_json():
     """Load challenges from GitHub or local JSON file"""
     challenges_by_day = {}
     
-    # Try to fetch from GitHub first
-    # try:
-    #     logging.info(f"Attempting to fetch challenges from GitHub: {CHALLENGES_JSON_URL}")
-    #     response = requests.get(CHALLENGES_JSON_URL, timeout=10)
-    #     if response.status_code == 200:
-    #         challenges_data = response.json()
-    #         logging.info(f"Successfully loaded challenges from GitHub")
-            
-    #         # Convert to dictionary by day for easy lookup
-    #         for challenge in challenges_data.get("schedule", []):
-    #             day = challenge.get("day")
-    #             if day:
-    #                 challenges_by_day[day] = challenge
-            
-    #         return challenges_by_day
-    # except Exception as e:
-    #     logging.error(f"Error fetching challenges from GitHub: {e}")
-    
-    # If GitHub fails, try local file
+    #Try to fetch from GitHub first
     try:
-        logging.info(f"Attempting to load challenges from local file: {LOCAL_CHALLENGES_FILE}")
-        with open(LOCAL_CHALLENGES_FILE, 'r') as f:
-            challenges_data = json.load(f)
-            logging.info(f"Successfully loaded challenges from local file")
+        logging.info(f"Attempting to fetch challenges from GitHub: {CHALLENGES_JSON_URL}")
+        response = requests.get(CHALLENGES_JSON_URL, timeout=10)
+        if response.status_code == 200:
+            challenges_data = response.json()
+            logging.info(f"Successfully loaded challenges from GitHub")
             
             # Convert to dictionary by day for easy lookup
             for challenge in challenges_data.get("schedule", []):
@@ -106,7 +89,24 @@ def load_challenges_from_json():
             
             return challenges_by_day
     except Exception as e:
-        logging.error(f"Error loading challenges from local file: {e}")
+        logging.error(f"Error fetching challenges from GitHub: {e}")
+    
+    # If GitHub fails, try local file
+    # try:
+    #     logging.info(f"Attempting to load challenges from local file: {LOCAL_CHALLENGES_FILE}")
+    #     with open(LOCAL_CHALLENGES_FILE, 'r') as f:
+    #         challenges_data = json.load(f)
+    #         logging.info(f"Successfully loaded challenges from local file")
+            
+    #         # Convert to dictionary by day for easy lookup
+    #         for challenge in challenges_data.get("schedule", []):
+    #             day = challenge.get("day")
+    #             if day:
+    #                 challenges_by_day[day] = challenge
+            
+    #         return challenges_by_day
+    # except Exception as e:
+    #     logging.error(f"Error loading challenges from local file: {e}")
     
     # If all else fails, return predefined challenges
     logging.warning("Using predefined challenges as fallback")
@@ -315,29 +315,66 @@ async def send_reminder(application):
         except Exception as e:
             logging.error(f"Failed to send reminder to chat {chat_id}: {e}")
 
+# async def announce_solution(application):
+#     """Announce that solution is live"""
+#     # Calculate previous day (assuming challenge starts April 1st)
+#     current_day = (datetime.now(utc).date() - datetime(2025, 4, 1, tzinfo=utc).date()).days
+    
+#     if 1 <= current_day <= 30:
+#         challenge = get_challenge_details(current_day)
+#         print(challenge)
+#         # c.execute("SELECT youtube_link FROM daily_challenges WHERE day=?", (current_day,))
+#         # result = c.fetchone()
+#         # youtube_link = result[0] if result and result[0] else "[Link coming soon]"
+        
+#         # message = (f"📣 *SOLUTION REVEAL: DAY {current_day}* 📣\n\n"
+#         #           f"The official solution for yesterday's challenge is now available!\n\n"
+#         #           f"🌐 *Website Solution:* [Web3 Compass]({CHALLENGE_URL})\n"
+#         #           f"📺 *Video Walkthrough:* [Watch Here]({youtube_link})\n\n"
+#         #           f"📚 Compare your approach with the official solution to level up your skills!")
+        
+#         # # Send to all configured groups
+#         # for chat_id in GROUP_CHAT_IDS:
+#         #     try:
+#         #         await application.bot.send_message(chat_id=chat_id, text=message, parse_mode="Markdown")
+#         #         logging.info(f"Sent solution announcement to chat {chat_id}")
+#         #     except Exception as e:
+#         #         logging.error(f"Failed to send solution announcement to chat {chat_id}: {e}")
+
 async def announce_solution(application):
     """Announce that solution is live"""
     # Calculate previous day (assuming challenge starts April 1st)
-    current_day = (datetime.now(utc).date() - datetime(2025, 4, 1, tzinfo=utc).date()).days
-    
+    current_day = (datetime.now(utc).date() - datetime(2025, 4, 1, tzinfo=utc).date()).days+1
+    print(current_day)
     if 1 <= current_day <= 30:
-        c.execute("SELECT youtube_link FROM daily_challenges WHERE day=?", (current_day,))
-        result = c.fetchone()
-        youtube_link = result[0] if result and result[0] else "[Link coming soon]"
-        
-        message = (f"📣 *SOLUTION REVEAL: DAY {current_day}* 📣\n\n"
-                  f"The official solution for yesterday's challenge is now available!\n\n"
-                  f"🌐 *Website Solution:* [Web3 Compass]({CHALLENGE_URL})\n"
-                  f"📺 *Video Walkthrough:* [Watch Here]({youtube_link})\n\n"
-                  f"📚 Compare your approach with the official solution to level up your skills!")
-        
-        # Send to all configured groups
+        challenge = ALL_CHALLENGES.get(current_day, {})
+        if not challenge:
+            logging.warning(f"No challenge found for Day {current_day}")
+            return
+
+        youtube_link = challenge.get("youtubeLink", "[Link coming soon]")
+        solution_link = challenge.get("solutionLink", CHALLENGE_URL)
+
+        if youtube_link != "[Link coming soon]" and solution_link != CHALLENGE_URL:
+            message = (f"📣 *SOLUTION REVEAL: DAY {current_day}* 📣\n\n"
+                       f"The official solution for today's challenge is now live!\n\n"
+                       f"📜 *Challenge:* `{challenge.get('contractName', f'Day {current_day} Challenge')}`\n\n"
+                       f"🧠 *Solution Link:* [View Solution]({solution_link})\n"
+                       f"📺 *Video Walkthrough:* [Watch Here]({youtube_link})\n\n"
+                       f"🎯 Compare your approach with the official one and level up!")
+        else:
+            message = (f"📣 *DAY {current_day} SOLUTION UPDATE* 📣\n\n"
+                       f"The solution for yesterday's challenge is not live yet.\n\n"
+                       f"🎬 Video and GitHub links dropping soon 👀 Stay tuned!\n"
+                       f"In the meantime, feel free to share your approach with the community!")
+
         for chat_id in GROUP_CHAT_IDS:
             try:
                 await application.bot.send_message(chat_id=chat_id, text=message, parse_mode="Markdown")
-                logging.info(f"Sent solution announcement to chat {chat_id}")
+                logging.info(f"Sent solution update for Day {current_day} to chat {chat_id}")
             except Exception as e:
-                logging.error(f"Failed to send solution announcement to chat {chat_id}: {e}")
+                logging.error(f"Failed to send solution message to chat {chat_id}: {e}")
+
 
 async def main():
     """Run the scheduler"""
@@ -351,12 +388,20 @@ async def main():
     
     # Schedule daily challenge announcement at 12 AM UTC
     scheduler.add_job(announce_daily_challenge, 'cron', hour=0, minute=0, args=[application])
-    
+
+    # scheduler.add_job(announce_daily_challenge, 'cron', hour=7, minute=13, args=[application])
+
+
     # Schedule reminder 3 hours before deadline (9 PM UTC)
     scheduler.add_job(send_reminder, 'cron', hour=21, minute=0, args=[application])
+
+    # scheduler.add_job(send_reminder, 'cron', hour=6, minute=53, args=[application])
+
     
     # Schedule solution announcement at 12:05 AM UTC (just after next day's challenge)
-    scheduler.add_job(announce_solution, 'cron', hour=0, minute=5, args=[application])
+    scheduler.add_job(announce_solution, 'cron', hour=23, minute=55, args=[application])
+
+    # scheduler.add_job(announce_solution, 'cron', hour=7, minute=46, args=[application])
     
     # Start the scheduler
     scheduler.start()

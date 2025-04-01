@@ -66,10 +66,10 @@ async def submit(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return
 
     pr_link = context.args[0]
-    if not pr_link.startswith('https://github.com'):
+    if not pr_link.startswith('https://github.com/The-Web3-Compass/30-days-of-solidity-submissions/pull'):
         await update.message.reply_text(
             "❌ *Invalid Link Detected!*\n\n"
-            "Please provide a valid GitHub PR link starting with `https://github.com`",
+            "Please provide a valid GitHub PR link starting with `https://github.com/The-Web3-Compass/30-days-of-solidity-submissions/pull`",
             parse_mode="Markdown"
         )
         return
