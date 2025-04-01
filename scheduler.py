@@ -315,6 +315,29 @@ async def send_reminder(application):
         except Exception as e:
             logging.error(f"Failed to send reminder to chat {chat_id}: {e}")
 
+
+async def Web3ResourceMessage(application):
+    """Send reminder 3 hours before deadline"""
+    # message = ("⏰ *FINAL COUNTDOWN: 3 HOURS LEFT!* ⏰\n\n"
+    #            "🔥 Time is running out for today's challenge!\n\n"
+    #            "💻 Don't break your streak! Submit your solution using `/submit <GitHub_PR_link>`\n\n"
+    #            "💡 Tip: Even a simple solution is better than missing a day!")
+    message = ("📚 *JUST LAUNCHED: THE WEB3 RESOURCE VAULT* 🧠💥\n\n"
+           "We've opened up a brand new GitHub repo full of 🔥 Web3 learning resources — tutorials, blogs, videos, and more!\n\n"
+           "🌍 Dive in here: [Web3 Resource Vault](https://github.com/The-Web3-Compass/Web3-Resources)\n\n"
+           "✨ If you find it helpful, don’t forget to ⭐ star the repo and hit that 'Follow' button to stay in the loop.\n\n"
+           "🛠️ Got a cool link or hidden gem? PRs are open — come contribute and help the community grow smarter, faster, and more decentralized 🧙‍♂️🚀")
+
+    current_day = (datetime.now(utc).date() - datetime(2025, 4, 1, tzinfo=utc).date()).days + 1
+    if current_day == 1:
+    # Send to all configured groups
+        for chat_id in GROUP_CHAT_IDS:
+            try:
+                await application.bot.send_message(chat_id=chat_id, text=message, parse_mode="Markdown")
+                logging.info(f"Sent reminder to chat {chat_id}")
+            except Exception as e:
+                logging.error(f"Failed to send reminder to chat {chat_id}: {e}")
+
 # async def announce_solution(application):
 #     """Announce that solution is live"""
 #     # Calculate previous day (assuming challenge starts April 1st)
@@ -402,6 +425,9 @@ async def main():
     scheduler.add_job(announce_solution, 'cron', hour=23, minute=55, args=[application])
 
     # scheduler.add_job(announce_solution, 'cron', hour=7, minute=46, args=[application])
+
+    scheduler.add_job(Web3ResourceMessage, 'cron', hour=9, minute=30, args=[application])
+
     
     # Start the scheduler
     scheduler.start()
