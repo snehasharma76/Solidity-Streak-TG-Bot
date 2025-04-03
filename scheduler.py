@@ -118,6 +118,8 @@ ALL_CHALLENGES = load_challenges_from_json()
 def get_challenge_details(day):
     """Fetch challenge details from JSON, database, or website"""
     try:
+        
+        ALL_CHALLENGES = load_challenges_from_json()
         # First check if we already have it in the database
         c.execute("SELECT contract_name, week, example_application, concepts_taught, logical_progression FROM daily_challenges WHERE day=?", (day,))
         result = c.fetchone()
