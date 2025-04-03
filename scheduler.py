@@ -369,6 +369,9 @@ async def announce_solution(application):
     # Calculate previous day (assuming challenge starts April 1st)
     current_day = (datetime.now(utc).date() - datetime(2025, 4, 1, tzinfo=utc).date()).days+1
     print(current_day)
+    # Re-load the challenges every time this function is called
+    ALL_CHALLENGES = load_challenges_from_json()
+
     if 1 <= current_day <= 30:
         challenge = ALL_CHALLENGES.get(current_day, {})
         if not challenge:
