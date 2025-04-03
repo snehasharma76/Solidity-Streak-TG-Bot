@@ -385,7 +385,7 @@ async def announce_solution(application):
 
         if youtube_link != "[Link coming soon]" and solution_link != CHALLENGE_URL:
             message = (f"📣 *SOLUTION REVEAL: DAY {current_day}* 📣\n\n"
-                       f"The official solution for today's challenge is now live!\n\n"
+                       f"The official solution for yesterdays's challenge is now live!\n\n"
                        f"📜 *Challenge:* `{challenge.get('contractName', f'Day {current_day} Challenge')}`\n\n"
                        f"🧠 *Solution Link:* [View Solution]({solution_link})\n"
                        f"📺 *Video Walkthrough:* [Watch Here]({youtube_link})\n\n"
