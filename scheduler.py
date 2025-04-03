@@ -118,6 +118,8 @@ ALL_CHALLENGES = load_challenges_from_json()
 def get_challenge_details(day):
     """Fetch challenge details from JSON, database, or website"""
     try:
+        
+        ALL_CHALLENGES = load_challenges_from_json()
         # First check if we already have it in the database
         c.execute("SELECT contract_name, week, example_application, concepts_taught, logical_progression FROM daily_challenges WHERE day=?", (day,))
         result = c.fetchone()
@@ -369,6 +371,9 @@ async def announce_solution(application):
     # Calculate previous day (assuming challenge starts April 1st)
     current_day = (datetime.now(utc).date() - datetime(2025, 4, 1, tzinfo=utc).date()).days+1
     print(current_day)
+    # Re-load the challenges every time this function is called
+    ALL_CHALLENGES = load_challenges_from_json()
+
     if 1 <= current_day <= 30:
         challenge = ALL_CHALLENGES.get(current_day, {})
         if not challenge:
@@ -380,7 +385,7 @@ async def announce_solution(application):
 
         if youtube_link != "[Link coming soon]" and solution_link != CHALLENGE_URL:
             message = (f"📣 *SOLUTION REVEAL: DAY {current_day}* 📣\n\n"
-                       f"The official solution for today's challenge is now live!\n\n"
+                       f"The official solution for yesterdays's challenge is now live!\n\n"
                        f"📜 *Challenge:* `{challenge.get('contractName', f'Day {current_day} Challenge')}`\n\n"
                        f"🧠 *Solution Link:* [View Solution]({solution_link})\n"
                        f"📺 *Video Walkthrough:* [Watch Here]({youtube_link})\n\n"
