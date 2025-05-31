@@ -306,7 +306,7 @@ def get_challenge_details(day):
 async def announce_daily_challenge(application):
     """Announce the daily challenge at 12 AM UTC"""
     # Calculate current day (assuming challenge starts April 1st)
-    current_day = (datetime.now(utc).date() - datetime(2025, 4, 1, tzinfo=utc).date()).days + 1
+    current_day = (datetime.now(utc).date() - datetime(2025, 6, 1, tzinfo=utc).date()).days + 1
     
     if 1 <= current_day <= 30:
         challenge = get_challenge_details(current_day)
