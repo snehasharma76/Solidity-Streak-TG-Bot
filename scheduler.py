@@ -257,8 +257,8 @@ def get_challenge_details(day):
 
 async def announce_daily_challenge(application):
     """Announce the daily challenge at 12 AM UTC"""
-    # Calculate current day (assuming challenge starts April 1st)
-    current_day = (datetime.now(utc).date() - datetime(2025, 4, 1, tzinfo=utc).date()).days + 1
+    # Calculate current day (assuming challenge starts June 1st)
+    current_day = (datetime.now(utc).date() - datetime(2025, 6, 1, tzinfo=utc).date()).days + 1
     
     if 1 <= current_day <= 30:
         challenge = get_challenge_details(current_day)
@@ -330,7 +330,7 @@ async def Web3ResourceMessage(application):
            "✨ If you find it helpful, don’t forget to ⭐ star the repo and hit that 'Follow' button to stay in the loop.\n\n"
            "🛠️ Got a cool link or hidden gem? PRs are open — come contribute and help the community grow smarter, faster, and more decentralized 🧙‍♂️🚀")
 
-    current_day = (datetime.now(utc).date() - datetime(2025, 4, 1, tzinfo=utc).date()).days + 1
+    current_day = (datetime.now(utc).date() - datetime(2025, 6, 1, tzinfo=utc).date()).days + 1
     if current_day == 1:
     # Send to all configured groups
         for chat_id in GROUP_CHAT_IDS:
@@ -342,8 +342,8 @@ async def Web3ResourceMessage(application):
 
 # async def announce_solution(application):
 #     """Announce that solution is live"""
-#     # Calculate previous day (assuming challenge starts April 1st)
-#     current_day = (datetime.now(utc).date() - datetime(2025, 4, 1, tzinfo=utc).date()).days
+#     # Calculate previous day (assuming challenge starts June 1st)
+#     current_day = (datetime.now(utc).date() - datetime(2025, 6, 1, tzinfo=utc).date()).days
     
 #     if 1 <= current_day <= 30:
 #         challenge = get_challenge_details(current_day)
@@ -368,8 +368,8 @@ async def Web3ResourceMessage(application):
 
 async def announce_solution(application):
     """Announce that solution is live"""
-    # Calculate previous day (assuming challenge starts April 1st)
-    current_day = (datetime.now(utc).date() - datetime(2025, 4, 1, tzinfo=utc).date()).days+1
+    # Calculate previous day (assuming challenge starts June 1st)
+    current_day = (datetime.now(utc).date() - datetime(2025, 6, 1, tzinfo=utc).date()).days+1
     print(current_day)
     # Re-load the challenges every time this function is called
     ALL_CHALLENGES = load_challenges_from_json()
