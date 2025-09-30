@@ -66,7 +66,8 @@ c = conn.cursor()
 # Create daily challenges table if not exists
 c.execute('''CREATE TABLE IF NOT EXISTS daily_challenges
              (day INTEGER PRIMARY KEY, contract_name TEXT, week TEXT, example_application TEXT, 
-              concepts_taught TEXT, logical_progression TEXT, youtube_link TEXT)''')
+              concepts_taught TEXT, logical_progression TEXT, youtube_link TEXT, solution_link TEXT,
+              sidetrack_title TEXT, sidetrack_concepts TEXT, sidetrack_example TEXT)''')
 conn.commit()
 
 def load_challenges_from_json():
@@ -121,7 +122,9 @@ def get_challenge_details(day):
         
         ALL_CHALLENGES = load_challenges_from_json()
         # First check if we already have it in the database
-        c.execute("SELECT contract_name, week, example_application, concepts_taught, logical_progression FROM daily_challenges WHERE day=?", (day,))
+        c.execute("""SELECT contract_name, week, example_application, concepts_taught, logical_progression, 
+                  youtube_link, solution_link, sidetrack_title, sidetrack_concepts, sidetrack_example 
+                  FROM daily_challenges WHERE day=?""", (day,))
         result = c.fetchone()
         if result:
             logging.info(f"Found challenge for day {day} in database")
@@ -134,6 +137,21 @@ def get_challenge_details(day):
                 challenge["conceptsTaught"] = result[3].split(",")
             if result[4]:
                 challenge["logicalProgression"] = result[4]
+            if result[5]:
+                challenge["youtubeLink"] = result[5]
+            if result[6]:
+                challenge["solutionLink"] = result[6]
+                
+            # Handle sideTrack data if available
+            if result[7]:  # If sidetrack_title exists
+                challenge["sideTrack"] = {
+                    "title": result[7]
+                }
+                if result[8]:  # sidetrack_concepts
+                    challenge["sideTrack"]["conceptsTaught"] = result[8].split(",")
+                if result[9]:  # sidetrack_example
+                    challenge["sideTrack"]["exampleApplication"] = result[9]
+                    
             return challenge
         
         # Check if we have the challenge in our loaded challenges
@@ -143,9 +161,26 @@ def get_challenge_details(day):
             
             # Store in database for future use
             concepts_str = ",".join(challenge.get("conceptsTaught", []))
-            c.execute("INSERT INTO daily_challenges (day, contract_name, week, example_application, concepts_taught, logical_progression) VALUES (?, ?, ?, ?, ?, ?)",
+            
+            # Handle sideTrack data if available
+            sidetrack_title = ""
+            sidetrack_concepts_str = ""
+            sidetrack_example = ""
+            
+            if "sideTrack" in challenge and challenge["sideTrack"]:
+                sidetrack = challenge["sideTrack"]
+                sidetrack_title = sidetrack.get("title", "")
+                if "conceptsTaught" in sidetrack and sidetrack["conceptsTaught"]:
+                    sidetrack_concepts_str = ",".join(sidetrack["conceptsTaught"])
+                sidetrack_example = sidetrack.get("exampleApplication", "")
+            
+            c.execute("""INSERT INTO daily_challenges 
+                      (day, contract_name, week, example_application, concepts_taught, logical_progression, 
+                       youtube_link, solution_link, sidetrack_title, sidetrack_concepts, sidetrack_example) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                     (day, challenge.get("contractName", ""), challenge.get("week", ""), challenge.get("exampleApplication", ""), 
-                     concepts_str, challenge.get("logicalProgression", "")))
+                     concepts_str, challenge.get("logicalProgression", ""), challenge.get("youtubeLink", ""),
+                     challenge.get("solutionLink", ""), sidetrack_title, sidetrack_concepts_str, sidetrack_example))
             conn.commit()
             logging.info(f"Saved JSON challenge for day {day} to database")
             
@@ -257,8 +292,8 @@ def get_challenge_details(day):
 
 async def announce_daily_challenge(application):
     """Announce the daily challenge at 12 AM UTC"""
-    # Calculate current day (assuming challenge starts June 1st)
-    current_day = (datetime.now(utc).date() - datetime(2025, 6, 1, tzinfo=utc).date()).days + 1
+    # Calculate current day (assuming challenge starts October 1st)
+    current_day = (datetime.now(utc).date() - datetime(2025, 10, 1, tzinfo=utc).date()).days + 1
     
     if 1 <= current_day <= 30:
         challenge = get_challenge_details(current_day)
@@ -284,13 +319,35 @@ async def announce_daily_challenge(application):
             if 'logicalProgression' in challenge and challenge['logicalProgression']:
                 progression_text = f"📈 *Learning Progression:*\n{challenge['logicalProgression']}\n\n"
             
+            # Check for sideTrack content
+            sidetrack_text = ""
+            if 'sideTrack' in challenge and challenge['sideTrack']:
+                sidetrack = challenge['sideTrack']
+                sidetrack_text = f"🔄 *SIDE TRACK: {sidetrack.get('title', 'Special Topic')}*\n\n"
+                
+                # Add sideTrack concepts if available
+                if 'conceptsTaught' in sidetrack and sidetrack['conceptsTaught']:
+                    sidetrack_text += "🧠 *Key Points:*\n"
+                    for concept in sidetrack['conceptsTaught']:
+                        sidetrack_text += f"• {concept}\n"
+                    sidetrack_text += "\n"
+                
+                # Add sideTrack example if available
+                if 'exampleApplication' in sidetrack and sidetrack['exampleApplication']:
+                    sidetrack_text += f"🛠️ *Practical Example:*\n{sidetrack['exampleApplication']}\n\n"
+            
             message = (f"💥 *DAY {current_day} CHALLENGE IS LIVE!* 💥\n\n"
                       f"{week_text}"
                       f"📌 *Today's Challenge:* {challenge.get('contractName', f'Day {current_day} Challenge')}\n\n"
                       f"{example_text}"
                       f"{concepts_text}"
-                      f"{progression_text}"
-                      f"🔗 *Full Details:* [Web3 Compass Challenge Calendar]({CHALLENGE_URL})\n\n"
+                      f"{progression_text}")
+            
+            # Add sideTrack content if available
+            if sidetrack_text:
+                message += f"\n{sidetrack_text}"
+            
+            message += (f"🔗 *Full Details:* [Web3 Compass Challenge Calendar]({CHALLENGE_URL})\n\n"
                       f"👉 Submit your solution using `/submit <GitHub_PR_link>`\n\n"
                       f"💪 Let's crush this challenge together, builders!")
             
@@ -330,7 +387,7 @@ async def Web3ResourceMessage(application):
            "✨ If you find it helpful, don’t forget to ⭐ star the repo and hit that 'Follow' button to stay in the loop.\n\n"
            "🛠️ Got a cool link or hidden gem? PRs are open — come contribute and help the community grow smarter, faster, and more decentralized 🧙‍♂️🚀")
 
-    current_day = (datetime.now(utc).date() - datetime(2025, 6, 1, tzinfo=utc).date()).days + 1
+    current_day = (datetime.now(utc).date() - datetime(2025, 10, 1, tzinfo=utc).date()).days + 1
     if current_day == 1:
     # Send to all configured groups
         for chat_id in GROUP_CHAT_IDS:
@@ -342,8 +399,8 @@ async def Web3ResourceMessage(application):
 
 # async def announce_solution(application):
 #     """Announce that solution is live"""
-#     # Calculate previous day (assuming challenge starts June 1st)
-#     current_day = (datetime.now(utc).date() - datetime(2025, 6, 1, tzinfo=utc).date()).days
+#     # Calculate previous day (assuming challenge starts October 1st)
+#     current_day = (datetime.now(utc).date() - datetime(2025, 10, 1, tzinfo=utc).date()).days
     
 #     if 1 <= current_day <= 30:
 #         challenge = get_challenge_details(current_day)
@@ -368,8 +425,8 @@ async def Web3ResourceMessage(application):
 
 async def announce_solution(application):
     """Announce that solution is live"""
-    # Calculate previous day (assuming challenge starts June 1st)
-    current_day = (datetime.now(utc).date() - datetime(2025, 6, 1, tzinfo=utc).date()).days+1
+    # Calculate previous day (assuming challenge starts October 1st)
+    current_day = (datetime.now(utc).date() - datetime(2025, 10, 1, tzinfo=utc).date()).days+1
     print(current_day)
     # Re-load the challenges every time this function is called
     ALL_CHALLENGES = load_challenges_from_json()
@@ -382,11 +439,12 @@ async def announce_solution(application):
 
         youtube_link = challenge.get("youtubeLink", "[Link coming soon]")
         solution_link = challenge.get("solutionLink", CHALLENGE_URL)
-
+        
         if youtube_link != "[Link coming soon]" and solution_link != CHALLENGE_URL:
+            contract_name = challenge.get('contractName', f'Day {current_day} Challenge')
             message = (f"📣 *SOLUTION REVEAL: DAY {current_day}* 📣\n\n"
-                       f"The official solution for yesterdays's challenge is now live!\n\n"
-                       f"📜 *Challenge:* `{challenge.get('contractName', f'Day {current_day} Challenge')}`\n\n"
+                       f"The official solution for yesterday's challenge is now live!\n\n"
+                       f"📜 *Challenge:* `{contract_name}`\n\n"
                        f"🧠 *Solution Link:* [View Solution]({solution_link})\n"
                        f"📺 *Video Walkthrough:* [Watch Here]({youtube_link})\n\n"
                        f"🎯 Compare your approach with the official one and level up!")

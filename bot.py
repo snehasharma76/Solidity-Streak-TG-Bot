@@ -49,7 +49,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "Ready to level up your blockchain skills? Here's how to participate:\n\n"
         "🔹 `/submit <github_pr_link>` - Submit your daily solution\n"
         "🔹 `/streak` - Check your current streak\n"
-        "🔹 `/leaderboard` - See the top builders\n\n"
+        "🔹 `/leaderboard` - See the top builders\n"
+        "🔹 `/gm` - Get a personalized good morning message\n\n"
         "Let's build the decentralized future together! 💪",
         parse_mode="Markdown"
     )
@@ -305,8 +306,8 @@ def get_challenge_details(day):
 
 async def announce_daily_challenge(application):
     """Announce the daily challenge at 12 AM UTC"""
-    # Calculate current day (assuming challenge starts April 1st)
-    current_day = (datetime.now(utc).date() - datetime(2025, 6, 1, tzinfo=utc).date()).days + 1
+    # Calculate current day (assuming challenge starts October 1st)
+    current_day = (datetime.now(utc).date() - datetime(2025, 10, 1, tzinfo=utc).date()).days + 1
     
     if 1 <= current_day <= 30:
         challenge = get_challenge_details(current_day)
@@ -331,8 +332,8 @@ async def send_reminder(application):
 
 async def announce_solution(application):
     """Announce that solution is live"""
-    # Calculate previous day (assuming challenge starts April 1st)
-    current_day = (datetime.now(utc).date() - datetime(2025, 4, 1, tzinfo=utc).date()).days
+    # Calculate previous day (assuming challenge starts October 1st)
+    current_day = (datetime.now(utc).date() - datetime(2025, 10, 1, tzinfo=utc).date()).days + 1
     
     if 1 <= current_day <= 30:
         c.execute("SELECT youtube_link FROM daily_challenges WHERE day=?", (current_day,))
@@ -347,6 +348,44 @@ async def announce_solution(application):
         for chat_id in GROUP_CHAT_IDS:
             await application.bot.send_message(chat_id=chat_id, text=message)
 
+async def gm_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Send a personalized GM message when the command /gm is issued."""
+    # Get the user's name (username or first name)
+    user = update.message.from_user
+    name = user.username if user.username else user.first_name
+    
+    # List of personalized GM messages
+    personalized_responses = [
+    f"*GM {name}!* 🌞 Rise and shine, blockchain superstar!",
+    f"*Good Morning {name}!* 🚀 Ready to code your way to greatness today?",
+    f"*Hey {name}, GM!* ☕ Hope your coffee is as strong as your coding skills!",
+    f"*GM {name}!* 💪 Another day, another opportunity to build something amazing!",
+    f"*Yo {name}, GM!* 🔥 Let’s set the blockchain world on fire today!",
+    f"*GM {name}!* 🧠 Your smart brain + smart contracts = unstoppable!",
+    f"*GM Solidity Wizard {name}!* ✨ May your code compile on the first try!",
+    f"*GM {name}!* 💎 Hands of diamond, mind of gold, code of the future!",
+    f"*GM {name}!* 🌈 Hope your day is as colorful as the NFTs you’ll create!",
+    f"*GM {name}!* 🤓 Time to turn caffeine into clean code!",
+    f"*GM {name}!* 🏆 Champions start their day early — just like you!",
+    f"*GM {name}!* 🌐 The Web3 world is waiting for your contributions!",
+    f"*GM {name}!* 🔗 Another block in your chain of success today!",
+    f"*GM {name}!* 🚀 To the moon with your coding skills!",
+    f"*GM {name}!* 🧩 Every line of code is a piece of the future you’re building!",
+    f"*GM {name}!* 🕶️ Stay cool, stay gas-efficient, stay legendary!",
+    f"*GM {name}!* ⚡ Let’s debug life one line at a time!",
+    f"*GM {name}!* 🎨 Smart contracts today, generative art tomorrow?",
+    f"*GM {name}!* 🐱 Hope your day is bug-free — unlike some testnets we know!",
+    f"*GM {name}!* 🔥 Keep your coffee hot and your reverts cold!",
+    f"*GM {name}!* 🎯 Another perfect day to hit `deploy` without fear!",
+    f"*GM {name}!* 🚴‍♂️ Let’s keep building — the chain never sleeps!",
+    f"*GM {name}!* 🪙 Your energy is more valuable than any token today!",
+    f"*GM {name}!* 🕹️ Life’s a game, and you’re playing on hard mode (and winning)!"
+]
+
+    
+    # Send a random personalized GM message
+    await update.message.reply_text(random.choice(personalized_responses), parse_mode="Markdown")
+
 def main() -> None:
     """Start the bot."""
     # Initialize the application
@@ -358,14 +397,15 @@ def main() -> None:
     application.add_handler(CommandHandler("streak", streak))
     application.add_handler(CommandHandler("leaderboard", leaderboard))
     application.add_handler(CommandHandler("chatid", get_chat_id))
+    application.add_handler(CommandHandler("gm", gm_command))
 
     # Add message handler for all messages (including GM)
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
     # Add a command to manually trigger announcements (for testing)
     application.add_handler(CommandHandler("announce", lambda update, context: announce_daily_challenge(application)))
-    application.add_handler(CommandHandler("reminder", lambda update, context: send_reminder(application)))
-    application.add_handler(CommandHandler("solution", lambda update, context: announce_solution(application)))
+    # application.add_handler(CommandHandler("reminder", lambda update, context: send_reminder(application)))
+    # application.add_handler(CommandHandler("solution", lambda update, context: announce_solution(application)))
     
     # Start the bot
     application.run_polling()

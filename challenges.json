@@ -68,9 +68,21 @@
       "day": 9,
       "week": "Week 2: Intermediate Solidity",
       "contractName": "SmartCalculator.sol",
-      "conceptsTaught": ["Calling functions of another contract", "address casting"],
+      "conceptsTaught": ["Calling functions of another contract", "address casting", "imports"],
       "exampleApplication": "A contract that interacts with another contract to retrieve or modify data. Like a calculator app, where one contract asks another to compute something.",
-      "logicalProgression": "Introduces inter-contract communication."
+      "logicalProgression": "Introduces inter-contract communication.",
+      "youtubeLink": "https://youtu.be/AUA6yZBabJ0",
+      "solutionLink": "https://builder-hub.notion.site/Smart-Calculator-1d05720a23ef803a86e3e16d534b51ab",
+      "sideTrack": {
+        "title": "Injective Precompiles – Blockchain Cheat Codes",
+        "conceptsTaught": [
+          "Precompiles are built-in contracts at fixed addresses on Injective",
+          "They execute natively for high efficiency",
+          "Provide access to Injective-specific features like the bank, staking, and exchange modules",
+          "Allow contracts to interact with chain-native modules without writing complex logic"
+        ],
+        "exampleApplication": "Exploring the Bank precompile on Injective to interact with native token transfers and balances directly from your smart contract."
+      }
     },
     {
       "day": 10,
@@ -198,7 +210,19 @@
       "contractName": "AutomatedMarketMaker.sol",
       "conceptsTaught": ["AMM logic", "constant product formula", "liquidity pools"],
       "exampleApplication": "A contract implementing a simple AMM, demonstrating liquidity provision.",
-      "logicalProgression": "Introduces advanced DeFi with AMMs."
+      "logicalProgression": "Introduces advanced DeFi with AMMs.",
+      "youtubeLink": "https://youtu.be/example25",
+      "solutionLink": "https://builder-hub.notion.site/automated-market-maker",
+      "sideTrack": {
+        "title": "Concentrated Liquidity in AMMs",
+        "conceptsTaught": [
+          "Concentrated liquidity allows LPs to provide liquidity within specific price ranges",
+          "Increases capital efficiency compared to traditional AMMs",
+          "Enables customized risk/reward profiles for liquidity providers",
+          "Pioneered by Uniswap v3 and now adopted by many DEXes"
+        ],
+        "exampleApplication": "Exploring how concentrated liquidity positions can be created and managed in modern DEX protocols."
+      }
     },
     {
       "day": 26,
